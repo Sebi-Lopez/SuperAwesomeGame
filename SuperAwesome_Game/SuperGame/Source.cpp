@@ -18,9 +18,11 @@ int main(int argc, char* argv[]) {
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 
-		bool exit = false;
 
-	
+	bool exit = false;
+
+		if(IMG_Init(IMG_INIT_PNG)!=0)exit=true;
+
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
 	SDL_Event e;
@@ -63,6 +65,10 @@ int main(int argc, char* argv[]) {
 
 	surface = IMG_Load("mario.png");
 	character = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface);
+
+	surface = IMG_Load("background.png");
+	background = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
 	while (!exit) {
@@ -127,15 +133,18 @@ int main(int argc, char* argv[]) {
 		if (left && rect.x > 0)rect.x -= SPEED;
 		if (right&& rect.x < (SCREEN_WIDTH-CHAR_SIZE))rect.x += SPEED;
 
-		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-		SDL_RenderClear(renderer);
+		/*SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+		SDL_RenderClear(renderer);*/
+
+		SDL_RenderCopy(renderer, background, NULL, NULL);
 		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		for (int i = 0; i < AMMO; i++) {
 			SDL_RenderFillRect(renderer, &bullet[i]);
-		}
-		SDL_RenderCopy(renderer, character, NULL, &rect);
+		}	
 		/*SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderFillRect(renderer, &rect);*/
+		SDL_RenderCopy(renderer, character, NULL, &rect);
+	
 		
 
 
