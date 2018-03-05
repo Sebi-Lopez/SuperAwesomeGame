@@ -1,5 +1,6 @@
 #include "..\SDL\include\SDL.h"
 #include "..\SDL_Image\include\SDL_image.h"
+#include <iostream>
 
 #pragma comment (lib, "SDL2.lib")
 #pragma comment (lib, "SDL2main.lib")
@@ -11,20 +12,19 @@
 #define CHAR_SIZE 75
 #define BULLET_SPEED 5
 #define AMMO 30
-
+#define BULLET_SIZE 10
 int main(int argc, char* argv[]) {
 
 
 	SDL_Init(SDL_INIT_EVERYTHING);
 	IMG_Init(IMG_INIT_PNG);
 
-
-
-
-
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
 	SDL_Event e;
+	SDL_Surface* surface; 
+	SDL_Texture* character; 
+	SDL_Texture* background; 
 	bool exit = false;
 
 	SDL_Rect rect;
@@ -35,8 +35,8 @@ int main(int argc, char* argv[]) {
 	SDL_Rect bullet[AMMO];
 	
 	for (int i = 0; i < AMMO; i++) {
-		bullet[i].h = 5;
-		bullet[i].w = 20;
+		bullet[i].h = BULLET_SIZE;
+		bullet[i].w = BULLET_SIZE;
 		bullet[i].x = 2000;
 		bullet[i].y = 2000;
 	}
@@ -55,7 +55,8 @@ int main(int argc, char* argv[]) {
 
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
-	SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+	surface = IMG_Load("mario.png");
+
 
 	while (!exit) {
 		
