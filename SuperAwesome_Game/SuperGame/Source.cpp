@@ -17,7 +17,10 @@ int main(int argc, char* argv[]) {
 
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	IMG_Init(IMG_INIT_PNG);
+
+		bool exit = false;
+
+	if(IMG_Init(IMG_INIT_PNG)!=0)exit=true;
 
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
@@ -25,7 +28,6 @@ int main(int argc, char* argv[]) {
 	SDL_Surface* surface; 
 	SDL_Texture* character; 
 	SDL_Texture* background; 
-	bool exit = false;
 
 	SDL_Rect rect;
 	rect.x =  SCREEN_WIDTH/2;
@@ -33,7 +35,12 @@ int main(int argc, char* argv[]) {
 	rect.h = rect.w = CHAR_SIZE; 
 	int bullet_num = 0;
 	SDL_Rect bullet[AMMO];
-	
+	SDL_Rect Mario; 
+
+	Mario.h = 190;
+	Mario.w = 190;
+	Mario.x = 0;
+	Mario.y = 0;
 	for (int i = 0; i < AMMO; i++) {
 		bullet[i].h = BULLET_SIZE;
 		bullet[i].w = BULLET_SIZE;
@@ -56,7 +63,9 @@ int main(int argc, char* argv[]) {
 	renderer = SDL_CreateRenderer(window, -1, 0);
 
 	surface = IMG_Load("mario.png");
-
+	character = SDL_CreateTextureFromSurface(renderer, surface);
+	if (!surface) exit = true;
+	SDL_FreeSurface(surface);
 
 	while (!exit) {
 		
@@ -126,8 +135,9 @@ int main(int argc, char* argv[]) {
 		for (int i = 0; i < AMMO; i++) {
 			SDL_RenderFillRect(renderer, &bullet[i]);
 		}
-		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderFillRect(renderer, &rect);
+		SDL_RenderCopy(renderer, character, NULL, &rect);
+		/*SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+		SDL_RenderFillRect(renderer, &rect);*/
 		
 
 
