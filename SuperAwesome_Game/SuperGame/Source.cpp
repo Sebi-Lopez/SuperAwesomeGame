@@ -1,7 +1,9 @@
 #include "..\SDL\include\SDL.h"
+#include "..\SDL_Image\include\SDL_image.h"
 
 #pragma comment (lib, "SDL2.lib")
 #pragma comment (lib, "SDL2main.lib")
+#pragma comment (lib, "SDL2_Image.lib")
 
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 760
@@ -14,6 +16,10 @@ int main(int argc, char* argv[]) {
 
 
 	SDL_Init(SDL_INIT_EVERYTHING);
+	IMG_Init(IMG_INIT_PNG);
+
+
+
 
 
 	SDL_Window* window = nullptr;
@@ -132,6 +138,6 @@ int main(int argc, char* argv[]) {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
-	
+	IMG_Quit();
 	return 0; 
 }
