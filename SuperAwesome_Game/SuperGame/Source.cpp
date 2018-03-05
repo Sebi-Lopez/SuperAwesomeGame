@@ -8,7 +8,7 @@
 #define SPEED 1
 #define CHAR_SIZE 75
 #define BULLET_SPEED 5
-
+#define AMMO 30
 
 int main(int argc, char* argv[]) {
 
@@ -25,22 +25,21 @@ int main(int argc, char* argv[]) {
 	rect.x =  SCREEN_WIDTH/2;
 	rect.y = SCREEN_HEIGHT / 2;
 	rect.h = rect.w = CHAR_SIZE; 
+	int bullet_num = 0;
+	SDL_Rect bullet[AMMO];
 	
-	SDL_Rect bullet;
-	bullet.h = 5;
-	bullet.w = 20;
-	bullet.x = 5000;
-	bullet.y = 5000;
+	for (int i = 0; i < AMMO; i++) {
+		bullet[i].h = 5;
+		bullet[i].w = 20;
+		bullet[i].x = 2000;
+		bullet[i].y = 2000;
+	}
 
 	bool up = false;	
 	bool down = false;	
 	bool left = false;
 	bool right = false;
 	bool shot = false; 
-	bool shot_r = true;
-	bool shot_l = false;
-
-
 
 
 	window = SDL_CreateWindow("My Mega Super Awesome Game",
@@ -86,36 +85,29 @@ int main(int argc, char* argv[]) {
 						break;
 					case SDL_SCANCODE_LEFT:
 						left = true;
-						if (shot_r == true) {
-							shot_r = false;
-							bullet.x = 2000;
-						}
-						shot_l = true; 
 						break;
 					case SDL_SCANCODE_RIGHT:
 						right = true;
-						if (shot_l == true) {
-							shot_l = false;
-							bullet.x = 2000;
-						}
-						shot_r = true; 
 						break;
 					case SDL_SCANCODE_ESCAPE:
 						exit = true;
 						break;
 					case SDL_SCANCODE_SPACE:
-						if (shot_r) bullet.x = rect.x + CHAR_SIZE;
-						if (shot_l) bullet.x = rect.x;
-						bullet.y = rect.y + (CHAR_SIZE / 2);
+						shot = true; 
+						bullet[bullet_num].x = rect.x +(CHAR_SIZE - 20);
+						bullet[bullet_num].y = rect.y + (CHAR_SIZE / 2);
+						bullet_num++;
+						if (bullet_num == AMMO)bullet_num = 0;
 						break; 
 					}
 				}
 				else if (e.type == SDL_QUIT) exit = true;
 		}
-		if (shot_r) bullet.x += BULLET_SPEED;
-		if (bullet.x > SCREEN_WIDTH)bullet.x = 2000;
-		if (shot_l) bullet.x -= BULLET_SPEED;
-		if (bullet.x < 0)bullet.x = 2000;
+		
+		for (int i = 0; i < AMMO; i++) {
+			if (shot) bullet[i].x += BULLET_SPEED;
+		}
+
 		if (up && rect.y > 0) rect.y -= SPEED;
 		if (down && rect.y < (SCREEN_HEIGHT-CHAR_SIZE))rect.y += SPEED;
 		if (left && rect.x > 0)rect.x -= SPEED;
@@ -123,10 +115,13 @@ int main(int argc, char* argv[]) {
 
 		SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
 		SDL_RenderClear(renderer);
+		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+		for (int i = 0; i < AMMO; i++) {
+			SDL_RenderFillRect(renderer, &bullet[i]);
+		}
 		SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
 		SDL_RenderFillRect(renderer, &rect);
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		SDL_RenderFillRect(renderer, &bullet);
+		
 
 
 		SDL_RenderPresent(renderer);
@@ -134,6 +129,9 @@ int main(int argc, char* argv[]) {
 		SDL_Delay(2);
 	}
 
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_Quit();
 	
 	return 0; 
 }
