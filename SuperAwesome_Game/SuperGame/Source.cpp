@@ -64,7 +64,6 @@ int main(int argc, char* argv[]) {
 
 	surface = IMG_Load("mario.png");
 	character = SDL_CreateTextureFromSurface(renderer, surface);
-	if (!surface) exit = true;
 	SDL_FreeSurface(surface);
 
 	while (!exit) {
