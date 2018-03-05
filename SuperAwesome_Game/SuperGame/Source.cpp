@@ -20,8 +20,7 @@ int main(int argc, char* argv[]) {
 
 		bool exit = false;
 
-	if(IMG_Init(IMG_INIT_PNG)!=0)exit=true;
-
+	
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
 	SDL_Event e;
