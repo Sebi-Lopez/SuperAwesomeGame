@@ -40,7 +40,7 @@ int main(int argc, char* argv[]) {
 	SDL_Surface* surface; 
 	SDL_Texture* character; 
 	SDL_Texture* background; 
-	SDL_Texture* laser;
+	SDL_Texture* fireball;
 	projectile shots[AMMO];
 	int last_shot = 0;
 	SDL_Rect rect;
@@ -77,17 +77,20 @@ int main(int argc, char* argv[]) {
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
-	surface = IMG_Load("mario.png");
-	if (!surface) printf("%s", IMG_GetError());
+	surface = IMG_Load("assets/mario.png");
+		if (!surface) exit = true;
 	character = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
-	surface = IMG_Load("background.png");
+	surface = IMG_Load("assets/background.png");
+		if (!surface) exit = true;
+
 	background = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
-	surface = IMG_Load("laser.png");
-	laser = SDL_CreateTextureFromSurface(renderer, surface);
+	surface = IMG_Load("assets/fireball.png");
+		if (!surface) exit = true;
+	fireball = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface); 
 
 	while (!exit) {
@@ -172,7 +175,7 @@ int main(int argc, char* argv[]) {
 			{
 				target.x = shots[i].x;
 				target.y = shots[i].y;
-				SDL_RenderCopy(renderer, laser, NULL, &target); 
+				SDL_RenderCopy(renderer, fireball, NULL, &target); 
 			}
 		}	
 		SDL_RenderCopy(renderer, character, NULL, &rect);
