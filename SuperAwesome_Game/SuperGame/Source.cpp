@@ -9,10 +9,20 @@
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 760
 #define SPEED 5
-#define CHAR_SIZE 75
+#define PLAYER_SIZE 75
 #define BULLET_SPEED 15
-#define AMMO 30
+#define AMMO 5
 #define BULLET_SIZE 10
+
+
+struct projectile {
+	
+	int x, y;
+	bool alive = false; 
+
+};
+
+
 int main(int argc, char* argv[]) {
 
 
@@ -30,11 +40,14 @@ int main(int argc, char* argv[]) {
 	SDL_Surface* surface; 
 	SDL_Texture* character; 
 	SDL_Texture* background; 
-
+	SDL_Texture* laser;
+	projectile shots[AMMO];
+	int last_shot = 0;
 	SDL_Rect rect;
+
 	rect.x =  SCREEN_WIDTH/2;
 	rect.y = SCREEN_HEIGHT / 2;
-	rect.h = rect.w = CHAR_SIZE; 
+	rect.h = rect.w = PLAYER_SIZE; 
 	int bullet_num = 0;
 	SDL_Rect bullet[AMMO];
 	SDL_Rect Mario; 
@@ -55,7 +68,7 @@ int main(int argc, char* argv[]) {
 	bool left = false;
 	bool right = false;
 	bool shot = false; 
-
+	bool fire = false; 
 
 	window = SDL_CreateWindow("My Mega Super Awesome Game",
 		SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
@@ -72,6 +85,10 @@ int main(int argc, char* argv[]) {
 	surface = IMG_Load("background.png");
 	background = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
+
+	surface = IMG_Load("laser.png");
+	laser = SDL_CreateTextureFromSurface(renderer, surface);
+	SDL_FreeSurface(surface); 
 
 	while (!exit) {
 		
@@ -115,31 +132,48 @@ int main(int argc, char* argv[]) {
 						exit = true;
 						break;
 					case SDL_SCANCODE_SPACE:
-						shot = true; 
-						bullet[bullet_num].x = rect.x +(CHAR_SIZE - 20);
-						bullet[bullet_num].y = rect.y + (CHAR_SIZE / 2);
-						bullet_num++;
-						if (bullet_num == AMMO)bullet_num = 0;
+						fire = true; 
 						break; 
 					}
 				}
 				else if (e.type == SDL_QUIT) exit = true;
 		}
 		
+		if (fire) {
+			if (last_shot == AMMO) last_shot = 0; 
+			shots[last_shot].alive = true; 
+			shots[last_shot].x = rect.x + (PLAYER_SIZE);
+			shots[last_shot].y = rect.y + (PLAYER_SIZE / 2);
+			last_shot++;
+			fire = false; 
+		}
+
 		for (int i = 0; i < AMMO; i++) {
-			if (shot) bullet[i].x += BULLET_SPEED;
+			if (shots[i].alive)
+			{
+				shots[i].x += BULLET_SPEED;
+				if (shots[i].x > SCREEN_WIDTH) shots[i].alive = false; 
+			}
 		}
 
 		if (up && rect.y > 0) rect.y -= SPEED;
-		if (down && rect.y < (SCREEN_HEIGHT-CHAR_SIZE))rect.y += SPEED;
+		if (down && rect.y < (SCREEN_HEIGHT-PLAYER_SIZE))rect.y += SPEED;
 		if (left && rect.x > 0)rect.x -= SPEED;
-		if (right&& rect.x < (SCREEN_WIDTH-CHAR_SIZE))rect.x += SPEED;
+		if (right&& rect.x < (SCREEN_WIDTH-PLAYER_SIZE))rect.x += SPEED;
 
+		SDL_Rect target;
+		target.h = 20;
+		target.w = 20;
 
 		SDL_RenderCopy(renderer, background, NULL, NULL);
-		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-		for (int i = 0; i < AMMO; i++) {
-			SDL_RenderFillRect(renderer, &bullet[i]);
+		
+		for(int i=0;i<AMMO;i++){
+			if (shots[i].alive == true) 
+			{
+				target.x = shots[i].x;
+				target.y = shots[i].y;
+				SDL_RenderCopy(renderer, laser, NULL, &target); 
+			}
 		}	
 		SDL_RenderCopy(renderer, character, NULL, &rect);
 	
