@@ -8,10 +8,10 @@
 
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 760
-#define SPEED 5
+#define SPEED 7
 #define PLAYER_SIZE 75
-#define BULLET_SPEED 15
-#define AMMO 5
+#define BULLET_SPEED 20
+#define AMMO 20
 #define BULLET_SIZE 10
 
 
@@ -50,12 +50,7 @@ int main(int argc, char* argv[]) {
 	rect.h = rect.w = PLAYER_SIZE; 
 	int bullet_num = 0;
 	SDL_Rect bullet[AMMO];
-	SDL_Rect Mario; 
 
-	Mario.h = 190;
-	Mario.w = 190;
-	Mario.x = 0;
-	Mario.y = 0;
 	for (int i = 0; i < AMMO; i++) {
 		bullet[i].h = BULLET_SIZE;
 		bullet[i].w = BULLET_SIZE;
@@ -160,8 +155,8 @@ int main(int argc, char* argv[]) {
 		}
 
 		if (up && rect.y > 0) rect.y -= SPEED;
-		if (down && rect.y < (SCREEN_HEIGHT-PLAYER_SIZE))rect.y += SPEED;
-		if (left && rect.x > 0)rect.x -= SPEED;
+		if (down && rect.y < (SCREEN_HEIGHT-195))rect.y += SPEED;
+		if (left && rect.x > -20)rect.x -= SPEED;
 		if (right&& rect.x < (SCREEN_WIDTH-PLAYER_SIZE))rect.x += SPEED;
 
 		SDL_Rect target;
