@@ -8,20 +8,21 @@
 
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 760
-#define SPEED 1
+#define SPEED 5
 #define CHAR_SIZE 75
-#define BULLET_SPEED 5
+#define BULLET_SPEED 15
 #define AMMO 30
 #define BULLET_SIZE 10
 int main(int argc, char* argv[]) {
 
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-
+	
 
 	bool exit = false;
 
-		if(IMG_Init(IMG_INIT_PNG)!=0)exit=true;
+	IMG_Init(IMG_INIT_PNG);
+	IMG_Init(IMG_INIT_JPG);
 
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
@@ -61,9 +62,10 @@ int main(int argc, char* argv[]) {
 		SCREEN_WIDTH, SCREEN_HEIGHT, 0
 	);
 
-	renderer = SDL_CreateRenderer(window, -1, 0);
+	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
 	surface = IMG_Load("mario.png");
+	if (!surface) printf("%s", IMG_GetError());
 	character = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface);
 
@@ -133,24 +135,15 @@ int main(int argc, char* argv[]) {
 		if (left && rect.x > 0)rect.x -= SPEED;
 		if (right&& rect.x < (SCREEN_WIDTH-CHAR_SIZE))rect.x += SPEED;
 
-		/*SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-		SDL_RenderClear(renderer);*/
 
 		SDL_RenderCopy(renderer, background, NULL, NULL);
 		SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
 		for (int i = 0; i < AMMO; i++) {
 			SDL_RenderFillRect(renderer, &bullet[i]);
 		}	
-		/*SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-		SDL_RenderFillRect(renderer, &rect);*/
 		SDL_RenderCopy(renderer, character, NULL, &rect);
 	
-		
-
-
 		SDL_RenderPresent(renderer);
-
-		SDL_Delay(2);
 	}
 
 	SDL_DestroyRenderer(renderer);
