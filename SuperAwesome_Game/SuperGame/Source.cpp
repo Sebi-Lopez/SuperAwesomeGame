@@ -30,12 +30,10 @@ int main(int argc, char* argv[]) {
 	bool exit = false;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
+	Mix_Init(MIX_INIT_OGG);
 	IMG_Init(IMG_INIT_PNG);
-	if(Mix_Init(MIX_INIT_OGG)!=0)exit=true;
 
-
-	IMG_Init(IMG_INIT_PNG);
-	IMG_Init(IMG_INIT_JPG);
+	Mix_OpenAudio(25000, MIX_DEFAULT_FORMAT, 2, 2500);
 
 	SDL_Window* window = nullptr;
 	SDL_Renderer* renderer = nullptr; 
@@ -47,6 +45,7 @@ int main(int argc, char* argv[]) {
 	projectile shots[AMMO];
 	int last_shot = 0;
 	SDL_Rect rect;
+	
 
 	rect.x =  SCREEN_WIDTH/2;
 	rect.y = SCREEN_HEIGHT / 2;
@@ -75,6 +74,7 @@ int main(int argc, char* argv[]) {
 
 	renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_PRESENTVSYNC);
 
+
 	surface = IMG_Load("assets/mario.png");
 		if (!surface) exit = true;
 	character = SDL_CreateTextureFromSurface(renderer, surface);
@@ -91,9 +91,26 @@ int main(int argc, char* argv[]) {
 	fireball = SDL_CreateTextureFromSurface(renderer, surface);
 	SDL_FreeSurface(surface); 
 
+
+
+	Mix_Chunk* sample;
+
+	sample = Mix_LoadWAV("assets/laser.WAV");
+	if (!sample)exit = true;
+
+	Mix_Music* music; 
+
+	music = Mix_LoadMUS("assets/background_music.ogg");
+	if (!music)exit = true;
+
+	Mix_PlayMusic(music, -1);
+
+
 	while (!exit) {
-		
+
+
 		while (SDL_PollEvent(&e)!=0) {
+
 
 				if (e.type == SDL_KEYUP)
 				{
@@ -134,6 +151,8 @@ int main(int argc, char* argv[]) {
 						break;
 					case SDL_SCANCODE_SPACE:
 						fire = true; 
+						
+
 						break; 
 					}
 				}
@@ -141,6 +160,7 @@ int main(int argc, char* argv[]) {
 		}
 		
 		if (fire) {
+			Mix_PlayChannel(-1, sample, 0);
 			if (last_shot == AMMO) last_shot = 0; 
 			shots[last_shot].alive = true; 
 			shots[last_shot].x = rect.x + (PLAYER_SIZE);
@@ -187,10 +207,11 @@ int main(int argc, char* argv[]) {
 
 	IMG_Quit();
 
-
-	Mix_Quit();
+	Mix_FreeChunk(sample);
+	Mix_FreeMusic(music); 
 	Mix_CloseAudio();
-
+	Mix_Quit();
+	
 
 	return 0; 
 }
