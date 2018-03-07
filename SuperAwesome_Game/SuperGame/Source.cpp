@@ -95,7 +95,7 @@ int main(int argc, char* argv[]) {
 
 	Mix_Chunk* sample;
 
-	sample = Mix_LoadWAV("assets/laser.WAV");
+	sample = Mix_LoadWAV("assets/loser.WAV");
 	if (!sample)exit = true;
 
 	Mix_Music* music; 
