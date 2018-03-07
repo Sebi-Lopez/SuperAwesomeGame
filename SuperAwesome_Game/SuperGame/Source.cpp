@@ -1,10 +1,12 @@
 #include "..\SDL\include\SDL.h"
 #include "..\SDL_Image\include\SDL_image.h"
+#include "..\SDL_Mixer\include\SDL_mixer.h"
 #include <iostream>
 
 #pragma comment (lib, "SDL2.lib")
 #pragma comment (lib, "SDL2main.lib")
 #pragma comment (lib, "SDL2_Image.lib")
+#pragma comment (lib, "SDL2_mixer.lib")
 
 #define SCREEN_WIDTH 1080
 #define SCREEN_HEIGHT 760
@@ -25,11 +27,12 @@ struct projectile {
 
 int main(int argc, char* argv[]) {
 
+	bool exit = false;
 
 	SDL_Init(SDL_INIT_EVERYTHING);
-	
+	IMG_Init(IMG_INIT_PNG);
+	if(Mix_Init(MIX_INIT_OGG)!=0)exit=true;
 
-	bool exit = false;
 
 	IMG_Init(IMG_INIT_PNG);
 	IMG_Init(IMG_INIT_JPG);
@@ -181,6 +184,13 @@ int main(int argc, char* argv[]) {
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
 	SDL_Quit();
+
 	IMG_Quit();
+
+
+	Mix_Quit();
+	Mix_CloseAudio();
+
+
 	return 0; 
 }

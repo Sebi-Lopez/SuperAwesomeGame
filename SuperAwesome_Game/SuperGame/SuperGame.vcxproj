@@ -69,12 +69,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <LibraryPath>$(ProjectDir)\..\SDL_Image\libx86;$(ProjectDir)\..\SDL\libx86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\..\SDL_Image\libx86;$(ProjectDir)\..\SDL\libx86;$(ProjectDir)\..\SDL_Mixer\libx86;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)\..\SDL_Image\include;$(ProjectDir)\..\SDL\include;$(IncludePath)</IncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <LibraryPath>$(ProjectDir)\..\SDL_Image\libx86;$(ProjectDir)\..\SDL\libx86;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(ProjectDir)\..\SDL_Image\libx86;$(ProjectDir)\..\SDL\libx86;$(ProjectDir)\..\SDL_Mixer\libx86;$(LibraryPath)</LibraryPath>
     <IncludePath>$(ProjectDir)\..\SDL_Image\include;$(ProjectDir)\..\SDL\include;$(IncludePath)</IncludePath>
     <ReferencePath>$(ReferencePath)</ReferencePath>
   </PropertyGroup>
