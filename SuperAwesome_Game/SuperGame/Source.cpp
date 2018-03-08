@@ -13,7 +13,7 @@
 #define SPEED 7
 #define PLAYER_SIZE 75
 #define BULLET_SPEED 20
-#define AMMO 20
+#define AMMO 5
 #define BULLET_SIZE 10
 
 
@@ -174,10 +174,12 @@ void Movement() {
 	if (g.fire)
 	{
 		g.fire = false; 
-		Mix_PlayChannel(-1, g.fx_shot, 0);
+		Mix_PlayChannel(-1, g.fx_shot, 0);	
+		if (g.last_shot == AMMO) g.last_shot = 0;
 		g.shots[g.last_shot].alive = true;
 		g.shots[g.last_shot].x = g.player.x + PLAYER_SIZE;
 		g.shots[g.last_shot].y = g.player.y + (PLAYER_SIZE / 2);
+	
 		g.last_shot++;
 	}
 
