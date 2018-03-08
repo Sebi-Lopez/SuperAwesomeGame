@@ -162,6 +162,7 @@ bool Check_Input() {
 	return exit; 
 }
 
+
 void Movement() {
 
 	if (g.up && g.player.y > 0)g.player.y -= SPEED;
@@ -190,6 +191,7 @@ void Movement() {
 	}
 }
 
+
 void Render() {	
 	SDL_Rect target; 
 	target.h = BULLET_SIZE;
@@ -209,6 +211,8 @@ void Render() {
 	SDL_RenderPresent(g.renderer);									//Present
 }
 
+
+
 int main(int argc, char* argv[]) {
 
 	Start();
@@ -225,5 +229,3 @@ int main(int argc, char* argv[]) {
 
 	return 0; 
 }
-
-
